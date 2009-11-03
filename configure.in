@@ -1,0 +1,58 @@
+AC_INIT([emveepee], [0.1])
+AC_CONFIG_SRCDIR([README])
+AM_INIT_AUTOMAKE([tar-ustar])
+AC_CANONICAL_HOST
+AM_MAINTAINER_MODE
+
+PKG_CHECK_MODULES(MONO, mono >= 2.7)
+AC_PROG_INSTALL
+AC_PATH_PROG(GMCS, gmcs, no)
+if test "x$GMCS" = "xno"  ; then
+	AC_MSG_ERROR([No c-sharp compiler found])
+fi
+AC_SUBST(GMCS)
+
+AC_PATH_PROG(RUNTIME, mono, no)
+if test "x$RUNTIME" = "xno" ; then
+	AC_MSG_ERROR([No runtime found])
+fi
+AC_SUBST(RUNTIME)
+
+PKG_CHECK_MODULES(GTKSHARP, gtk-sharp-2.0)
+AC_SUBST(GTKSHARP_LIBS)
+
+PKG_CHECK_MODULES(ADDINS, mono-addins monodevelop, enable_addin=yes, enable_addin=no)
+AC_SUBST(ADDINS_LIBS)
+if test "x$enable_addin" = "xyes" ; then
+	MDADDINS_PATH=`pkg-config --variable=AddinsPath monodevelop`
+	MDADDINS_VERSION=`pkg-config --modversion monodevelop`
+else
+	MDADDINS_PATH=
+	MDADDINS_VERSION=
+fi
+AC_SUBST(MDADDINS_PATH)
+AC_SUBST(MDADDINS_VERSION)
+
+AM_CONDITIONAL(ENABLE_ADDIN, test x$enable_addin = "xyes")
+
+AC_OUTPUT([
+Makefile
+Emveepee.Decoding/Makefile
+Emveepee.Widgets/Makefile
+Emveepee.Addin/Emveepee.addins
+Emveepee.Addin/Emveepee.Addin.addin.xml
+Emveepee.Addin/Makefile
+emveepee/emveepee
+emveepee/Makefile
+])
+
+echo "---"
+echo "Configuration summary"
+echo ""
+echo "   * Installation prefix = $prefix"
+echo "   * Building MD addin = $enable_addin"
+echo ""
+echo "      NOTE: if any of the above say 'no' you may install the"
+echo "            corresponding development packages for them, rerun"
+echo "            autogen.sh to include them in the build."
+echo ""

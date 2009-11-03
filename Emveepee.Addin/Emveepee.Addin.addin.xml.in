@@ -1,0 +1,31 @@
+<Addin id = "Emveepee" name= "Visual Profiler" author = "Mike Kestner" copyright = "X11" url = "" description = "Support for integrated profiling." category = "IDE extensions" version = "@VERSION@">
+  <Runtime>
+    <Import assembly="Emveepee.Addin.dll"/>
+  </Runtime>
+  <Dependencies>
+    <Addin id="MonoDevelop.Core" version="@MDADDINS_VERSION@"/>
+    <Addin id="MonoDevelop.Core.Gui" version="@MDADDINS_VERSION@"/>
+    <Addin id="MonoDevelop.Projects" version="@MDADDINS_VERSION@"/>
+    <Addin id="MonoDevelop.Projects.Gui" version="@MDADDINS_VERSION@"/>
+    <Addin id="MonoDevelop.Ide" version="@MDADDINS_VERSION@"/>
+  </Dependencies>
+  <Extension path = "/MonoDevelop/Core/ExecutionModes">
+    <ModeSetType class="Emveepee.Addin.ProfilerExecutionModeSet" />
+  </Extension>
+  <Extension path = "/MonoDevelop/Ide/DisplayBindings">
+    <DisplayBinding insertbefore = "DefaultDisplayBinding" class = "Emveepee.Addin.ProfilerLogDisplayBinding" />
+  </Extension>
+  <Extension path = "/MonoDevelop/Ide/Pads/ProjectPad">
+    <NodeBuilder class = "Emveepee.Addin.ProfilerNodeBuilderExtension"/>
+  </Extension>
+  <Extension path = "/MonoDevelop/Ide/Commands">
+    <Category _name="Profile" id="Profile">
+      <Command id="Emveepee.Addin.ProfilerCommands.Profile" _label="Profile Item..." icon="gtk-execute" />
+    </Category>
+  </Extension>
+  <Extension path = "/MonoDevelop/Ide/ContextMenu/ProjectPad">
+    <Condition id="ItemType" value="Project">
+      <CommandItem id = "Emveepee.Addin.ProfilerCommands.Profile" insertafter = "MonoDevelop.Ide.Commands.ProjectCommands.RunEntry" />
+    </Condition>
+  </Extension>
+</Addin>

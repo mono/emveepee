@@ -1,0 +1,21 @@
+emveepee is a user interface for executing applications with the mono logging 
+profiler and viewing the result of logging profiler sessions.  The package 
+provides both a standalone Gtk# application (emveepee) and a MonoDevelop 
+addin (Emveepee.Addin.dll).
+
+This package is currently highly unstable, and builds upon unstable mono 
+versions and is therefore not recommended for widespread use, though any who
+are daring enough to want to try are welcome to report any issues via 
+bugzilla.novell.com module Mono Tools component emveepee.
+
+Discussion occurs on mono-devel-list@lists.ximian.com.
+
+Building:
+--------
+
+    ./configure [typical configure flags, such as --prefix=PREFIX]
+    make
+    make install
+
+When building from svn, substitute autogen.sh for configure.
+
