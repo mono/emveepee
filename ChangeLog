@@ -1,3 +1,9 @@
+2009-11-16  Mike Kestner <mkestner@novell.com>
+
+	* configure.in: back off requirement to 2.6.
+	* Emveepee.Widgets/ProfileConfiguration.cs: revert ccs option for
+	  now since it doesn't help and requires mono trunk.
+
 2009-11-03  Mike Kestner <mkestner@novell.com>
 
 	* Initial checkin of emveepee module.  This module is constructed 

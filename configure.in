@@ -4,7 +4,7 @@ AM_INIT_AUTOMAKE([tar-ustar])
 AC_CANONICAL_HOST
 AM_MAINTAINER_MODE
 
-PKG_CHECK_MODULES(MONO, mono >= 2.7)
+PKG_CHECK_MODULES(MONO, mono >= 2.6)
 AC_PROG_INSTALL
 AC_PATH_PROG(GMCS, gmcs, no)
 if test "x$GMCS" = "xno"  ; then

@@ -76,7 +76,7 @@ namespace Emveepee.Widgets {
 			if ((Mode & ProfileMode.Statistical) != 0) {
 				if (sb.Length > 0)
 					sb.Append (",");
-				sb.Append ("s=128,ccs=managed");
+				sb.Append ("s=128");
 			}
 
 			if (!StartEnabled)
