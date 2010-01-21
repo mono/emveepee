@@ -26,7 +26,7 @@ using System.IO;
 
 namespace  Emveepee.Decoding {	
 
-	public struct ClassInfo {
+	public class ClassInfo {
 
 		public uint Id;
 		public uint AssemblyId;
@@ -40,19 +40,34 @@ namespace  Emveepee.Decoding {
 		}
 	}
 
-	public struct MethodInfo {
+	public class MethodInfo {
 
-		public uint Id;
-		public uint ClassId;
-		public bool IsWrapper;
-		public string Name;
+		uint id;
+		public uint Id {
+			get { return id; }
+		}
+
+		uint class_id;
+		public uint ClassId {
+			get { return class_id; }
+		}
+
+		bool is_wrapper;
+		public bool IsWrapper {
+			get { return is_wrapper; }
+		}
+
+		string name;
+		public string Name {
+			get { return name; }
+		}
 
 		public MethodInfo (uint id, uint class_id, bool is_wrapper, string name)
 		{
-			Id = id;
-			ClassId = class_id;
-			IsWrapper = is_wrapper;
-			Name = name;
+			this.id = id;
+			this.class_id = class_id;
+			this.is_wrapper = is_wrapper;
+			this.name = name;
 		}
 	}
 
