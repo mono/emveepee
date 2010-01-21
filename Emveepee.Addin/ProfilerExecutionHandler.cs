@@ -70,7 +70,7 @@ namespace Emveepee.Addin {
 			DotNetExecutionCommand dnec = command as DotNetExecutionCommand;
 
 			ProfileConfiguration config = new ProfileConfiguration ();
-			config.AssemblyPath = command.CommandString;
+			config.TargetPath = command.CommandString;
 			ProfilerExecutionOptions options = config_data as ProfilerExecutionOptions;
 			if (options != null) {
 				config.StartEnabled = options.StartEnabled;

@@ -42,7 +42,7 @@ namespace Emveepee.Widgets {
 
 		string assembly_path;
 		[XmlAttribute]
-		public string AssemblyPath {
+		public string TargetPath {
 			get { return assembly_path; }
 			set { assembly_path = value; }
 		}
@@ -87,21 +87,21 @@ namespace Emveepee.Widgets {
 
 		public override string ToString ()
 		{
-			return System.IO.Path.GetFileName (AssemblyPath) + ":" + Mode + ", StartEnabled=" + StartEnabled;
+			return System.IO.Path.GetFileName (TargetPath) + ":" + Mode + ", StartEnabled=" + StartEnabled;
 		}
 
 		public override bool Equals (object o)
 		{
 			if (o is ProfileConfiguration) {
 				ProfileConfiguration c = o as ProfileConfiguration;
-				return AssemblyPath == c.AssemblyPath && Mode == c.Mode && StartEnabled == c.StartEnabled;
+				return TargetPath == c.TargetPath && Mode == c.Mode && StartEnabled == c.StartEnabled;
 			} else
 				return false;
 		}
 
 		public override int GetHashCode ()
 		{
-			return AssemblyPath.GetHashCode () ^ Mode.GetHashCode () ^ StartEnabled.GetHashCode ();
+			return TargetPath.GetHashCode () ^ Mode.GetHashCode () ^ StartEnabled.GetHashCode ();
 		}
 	}
 }

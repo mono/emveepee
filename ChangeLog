@@ -1,5 +1,25 @@
 2010-01-21  Mike Kestner <mkestner@novell.com>
 
+	* Emveepee.Widgets/Makefile.am: add new source file.
+	* Emveepee.Widgets/ProfileConfiguration.cs: s/Assembly/Target to 
+	better reflect profiling aspx pages.
+	* Emveepee.Widgets/ProfileOptionsEditor.cs: refactored from dialog
+	to support reuse with addin. Switch default to instrumented until I
+	can get reasonable data for stat mode.
+	* Emveepee.Widgets/ProfileView.cs: support filtering in StackView.
+	* Emveepee.Widgets/ProfilerProcess.cs: add support for launching 
+	ASP.net pages, a Kill method, and handle Win32Exception to display
+	error code when launch fails.
+	* Emveepee.Widgets/ProfileSetupDialog.cs: add support for selecting
+	aspx pages and use the new ProfileOptionsEditor. 
+	* Emveepee.Widgets/StackView.cs: add filtering hooks and improve the
+	refresh logic.
+	* Emveepee.Addin/ProfileExecutionHandler.cs: use new TargetPath API.
+	* emveepee/MainWindow.cs: show url in browser when profiling an aspx
+	page.  Kill any running profiler process on Shutdown.
+
+2010-01-21  Mike Kestner <mkestner@novell.com>
+
 	* Emveepee.Decoding/MappingBlock.cs: switch some info types from
 	value to reference and improve encapsulation.
 

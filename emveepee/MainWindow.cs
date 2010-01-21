@@ -125,6 +125,22 @@ namespace Emveepee {
 			});
 		}
 
+		[System.Runtime.InteropServices.DllImport ("libgtk-x11-2.0.so.0")]
+		static extern void gtk_show_uri (IntPtr screen, string url, uint timestamp, out IntPtr error);
+
+		void ShowBrowser (string path)
+		{
+			string url = "http://localhost:8080/" + System.IO.Path.GetFileName (path);
+			try {
+				IntPtr error;
+				gtk_show_uri (IntPtr.Zero, url, 0, out error);
+				if (error != IntPtr.Zero)
+					Console.WriteLine ("open browser to url: " + url);
+			} catch (Exception) {
+				Console.WriteLine ("open browser to url: " + url);
+			}
+		}
+
 		void StartProfile (ProfileConfiguration config)
 		{
 			ProfileView view = new ProfileView ();
@@ -136,6 +152,8 @@ namespace Emveepee {
 			proc.Paused += delegate { Refresh (view); };
 			proc.Exited += delegate { Refresh (view); logging_enabled_action.Visible = false; };
 			proc.Start ();
+			if (config.TargetPath.EndsWith (".aspx"))
+				GLib.Timeout.Add (5000, delegate { ShowBrowser (config.TargetPath); return false; });
 			log_info = new LogInfo (proc.LogFile, config.ToString ());
 			history.LogFiles.Prepend (log_info);
 			history.Configs.Prepend (config);
@@ -143,6 +161,8 @@ namespace Emveepee {
 
 		void Shutdown ()
 		{
+			if (proc != null && proc.IsRunning)
+				proc.Kill ();
 			history.Save ();
 			Gtk.Application.Quit ();
 		}

@@ -34,36 +34,22 @@ namespace Emveepee.Widgets {
 		{
 			config = new ProfileConfiguration ();
 			HBox box = new HBox (false, 6);
-			box.PackStart (new Label ("Assembly:"), false, false, 0);
-			FileChooserButton assembly_button = new FileChooserButton ("Select Assembly", FileChooserAction.Open);
+			box.PackStart (new Label ("Application:"), false, false, 0);
+			FileChooserButton target_button = new FileChooserButton ("Select Application", FileChooserAction.Open);
 			FileFilter filter = new FileFilter ();
 			filter.AddPattern ("*.exe");
-			assembly_button.Filter = filter;
-			assembly_button.SelectionChanged += delegate { 
-				config.AssemblyPath = assembly_button.Filename;
-				SetResponseSensitive (ResponseType.Accept, !String.IsNullOrEmpty (assembly_button.Filename));
+			filter.AddPattern ("*.aspx");
+			target_button.Filter = filter;
+			target_button.SelectionChanged += delegate { 
+				config.TargetPath = target_button.Filename;
+				SetResponseSensitive (ResponseType.Accept, !String.IsNullOrEmpty (target_button.Filename));
 			};
-			box.PackStart (assembly_button, true, true, 0);
+			box.PackStart (target_button, true, true, 0);
 			box.ShowAll ();
 			VBox.PackStart (box, false, false, 3);
-			box = new HBox (false, 6);
-			box.PackStart (new Label ("Type:"), false, false, 0);
-			ComboBox type_combo = ComboBox.NewText ();
-			type_combo.AppendText ("Allocations");
-			type_combo.AppendText ("Calls/Instrumented");
-			type_combo.AppendText ("Statistical");
-			type_combo.Active = 2;
-			type_combo.Changed += delegate { config.Mode = (ProfileMode) (1 << type_combo.Active); };
-			box.PackStart (type_combo, false, false, 0);
-			box.ShowAll ();
-			VBox.PackStart (box, false, false, 3);
-			box = new HBox (false, 6);
-			CheckButton start_enabled_chkbtn = new CheckButton ("Enabled at Startup");
-			start_enabled_chkbtn.Active = true;
-			start_enabled_chkbtn.Toggled += delegate { config.StartEnabled = start_enabled_chkbtn.Active; };
-			box.PackStart (start_enabled_chkbtn, false, false, 0);
-			box.ShowAll ();
-			VBox.PackStart (box, false, false, 3);
+			Widget editor = new ProfileOptionsEditor (config);
+			editor.ShowAll ();
+			VBox.PackStart (editor, false, false, 3);
 			SetResponseSensitive (ResponseType.Accept, false);
 		}
 

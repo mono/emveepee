@@ -121,8 +121,10 @@ namespace Emveepee.Widgets {
 				AppendColumn (col);
 				ExpanderColumn = col;
 				options.Changed += delegate { 
+					data.FilteredAssemblies = options.Filters.ToArray ();
 					store = new Store (data, options);
 					Model = new TreeModelAdapter (store);
+					Selection.SelectPath (new TreePath ("0"));
 				};
 			}
 
@@ -130,7 +132,7 @@ namespace Emveepee.Widgets {
 				get { 
 					TreeModel model;
 					TreePath[] paths = Selection.GetSelectedRows (out model);
-					return store [paths [0].Indices [0]];
+					return paths.Length > 0 ? store [paths [0].Indices [0]] : null;
 				}
 				set { throw new NotImplementedException (); }
 			}
@@ -194,7 +196,6 @@ namespace Emveepee.Widgets {
 			{
 				this.data = data;
 				this.options = options;
-				options.Changed += delegate { Refresh (); };
 				Label callers_lbl = new Label (Mono.Unix.Catalog.GetString ("Callers"));
 				callers_lbl.Show ();
 				Label calls_lbl = new Label (Mono.Unix.Catalog.GetString ("Calls"));
@@ -209,8 +210,8 @@ namespace Emveepee.Widgets {
 
 			void Refresh ()
 			{
-				calls.Store = new Store (data, options, item.Calls);
-				callers.Store = new Store (data, options, item.Callers);
+				calls.Store = new Store (data, options, item == null ? new List<StackItem> () : item.Calls);
+				callers.Store = new Store (data, options, item == null ? new List<StackItem> () : item.Callers);
 			}
 
 			public StackItem CurrentItem {

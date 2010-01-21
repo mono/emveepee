@@ -43,16 +43,29 @@ namespace Emveepee.Widgets {
 			this.proc = proc;
 			socket = new ProfilerSocket ();
 			socket.Paused += delegate { OnPaused (); };
-			proc.StartInfo.FileName = "mono";
-			proc.StartInfo.Arguments = "--profile=logging:" + config.ToArgs () + ",o=" + log_file + ",cp=" + socket.Port.ToString () + " " + config.AssemblyPath;
+			if (config.TargetPath.EndsWith (".exe")) {
+				proc.StartInfo.FileName = "mono";
+				proc.StartInfo.Arguments = "--profile=logging:" + config.ToArgs () + ",o=" + log_file + ",cp=" + socket.Port.ToString () + " " + config.TargetPath;
+			} else if (config.TargetPath.EndsWith (".aspx")) {
+				proc.StartInfo.FileName = "xsp2";
+				proc.StartInfo.EnvironmentVariables.Add ("MONO_OPTIONS", "--profile=logging:" + config.ToArgs () + ",o=" + log_file + ",cp=" + socket.Port.ToString ());
+				proc.StartInfo.Arguments = "--nonstop --port 8080 --root " + System.IO.Path.GetDirectoryName (config.TargetPath);
+				proc.StartInfo.UseShellExecute = false;
+			}
 			proc.EnableRaisingEvents = true;
 			proc.Exited += delegate { OnExited (); };
 		}
 
 		public event EventHandler Exited;
 
+		bool is_running;
+		public bool IsRunning {
+			get { return is_running; }
+		}
+
 		void OnExited ()
 		{
+			is_running = false;
 			if (Exited == null)
 				return;
 			Exited (this, EventArgs.Empty);
@@ -71,6 +84,12 @@ namespace Emveepee.Widgets {
 			get { return log_file; }
 		}
 
+		public void Kill ()
+		{
+			proc.Kill ();
+			is_running = false;
+		}
+
 		public void Pause ()
 		{
 			socket.Pause ();
@@ -83,7 +102,12 @@ namespace Emveepee.Widgets {
 
 		public void Start ()
 		{
-			proc.Start ();
+			try {
+				proc.Start ();
+				is_running = true;
+			} catch (System.ComponentModel.Win32Exception e) {
+				Console.WriteLine ("Got error code starting process: " + e.NativeErrorCode);
+			}
 		}
 	}
 }

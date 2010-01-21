@@ -21,59 +21,40 @@
 
 
 using System;
-using Emveepee.Decoding;
+using System.Text;
+using Gtk;
 
 namespace Emveepee.Widgets {
 	
-	[System.ComponentModel.ToolboxItem (true)]
-	public class ProfileView : Gtk.EventBox {
-
-		bool supports_filtering = false;
-		DisplayOptions options;
-		string path;
+	public class ProfileOptionsEditor : VBox {
 		
-		public string LogFile {
-			get { return path; }
-		}
+		ProfileConfiguration config;
 		
-		public bool LoadProfile (string path)
+		public ProfileOptionsEditor (ProfileConfiguration config) : base (false, 0)
 		{
-			this.path = path;
-			ProfileData data = new ProfileData (path);
-			data.ShowWrappers = Options.ShowWrappers;
-			data.FilteredAssemblies = Options.Filters.ToArray ();
-			Gtk.Widget view = null;
-			if (data.HasAllocationData)
-				view = new AllocationsView (data, Options);
-			else if (data.HasStackData) {
-				view = new StackView (data, Options);
-				supports_filtering = true;
-			}
-			view.ShowAll ();
-			View = view;
-			return true;
-		}
-		
-		public DisplayOptions Options {
-			get { 
-				if (options == null)
-					options = new DisplayOptions ();
-				return options;
-			}
-		}
-		
-		public bool SupportsFiltering {
-			get { return supports_filtering; }
+			this.config = config;
+			HBox box = new HBox (false, 6);
+			box.PackStart (new Label ("Type:"), false, false, 0);
+			ComboBox type_combo = ComboBox.NewText ();
+			type_combo.AppendText ("Allocations");
+			type_combo.AppendText ("Calls/Instrumented");
+			type_combo.AppendText ("Statistical");
+			type_combo.Active = 1;
+			type_combo.Changed += delegate { config.Mode = (ProfileMode) (1 << type_combo.Active); };
+			box.PackStart (type_combo, false, false, 0);
+			box.ShowAll ();
+			PackStart (box, false, false, 3);
+			box = new HBox (false, 6);
+			CheckButton start_enabled_chkbtn = new CheckButton ("Enabled at Startup");
+			start_enabled_chkbtn.Active = true;
+			start_enabled_chkbtn.Toggled += delegate { config.StartEnabled = start_enabled_chkbtn.Active; };
+			box.PackStart (start_enabled_chkbtn, false, false, 0);
+			box.ShowAll ();
+			PackStart (box, false, false, 3);
 		}
 
-		Gtk.Widget View {
-			get { return Child; }
-			set {
-				if (Child != null)
-					Remove (Child);
-				if (value != null)
-					Add (value);
-			}
+		public ProfileConfiguration Config {
+			get { return config; }
 		}
 	}
 }

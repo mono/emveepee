@@ -16,6 +16,7 @@ FILES =  \
 	History.cs \
 	Node.cs \
 	ProfileConfiguration.cs \
+	ProfileOptionsEditor.cs \
 	ProfileSetupDialog.cs \
 	ProfileStore.cs \
 	ProfileView.cs \
