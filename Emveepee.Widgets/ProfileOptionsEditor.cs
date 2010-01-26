@@ -40,6 +40,7 @@ namespace Emveepee.Widgets {
 			type_combo.AppendText ("Calls/Instrumented");
 			type_combo.AppendText ("Statistical");
 			type_combo.Active = 1;
+			config.Mode = ProfileMode.Instrumented;
 			type_combo.Changed += delegate { config.Mode = (ProfileMode) (1 << type_combo.Active); };
 			box.PackStart (type_combo, false, false, 0);
 			box.ShowAll ();

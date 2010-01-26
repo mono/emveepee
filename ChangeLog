@@ -1,3 +1,8 @@
+2010-01-26  Mike Kestner <mkestner@novell.com>
+
+	* Emveepee.Widgets/ProfilerOptionsEditor.cs: set default mode in 
+	config.
+
 2010-01-21  Mike Kestner <mkestner@novell.com>
 
 	* Emveepee.Widgets/Makefile.am: add new source file.
